@@ -8,5 +8,5 @@ spring:
       server:
         git:
           uri: https://github.com/montvlein/config-examen-esp-backend-Montivero-Fabricio
-          default-label: main
+          default-label: master
           force-pull: true
