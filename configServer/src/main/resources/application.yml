@@ -1,0 +1,12 @@
+server:
+  port: ${PORT:8888}
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/montvlein/config-examen-esp-backend-Montivero-Fabricio
+          default-label: main
+          force-pull: true
