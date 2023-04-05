@@ -3,6 +3,7 @@ package com.dh.catalog.controller;
 import com.dh.catalog.client.MovieFeign;
 
 import com.dh.catalog.client.SerieFeign;
+import com.dh.catalog.service.CatalogServices;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,19 +17,17 @@ import java.util.List;
 @RequestMapping("/api/v1/catalog")
 public class CatalogController {
 
-	private final MovieFeign movieFeign;
-	private final SerieFeign serieFeign;
+	private final CatalogServices services;
 
-	public CatalogController(MovieFeign movieFeign, SerieFeign serieFeign) {
-		this.movieFeign = movieFeign;
-		this.serieFeign = serieFeign;
+	public CatalogController(CatalogServices services) {
+		this.services = services;
 	}
 
 	@GetMapping("/online/{genre}")
-	ResponseEntity<List> getByGenreOnline(@PathVariable String genre) {
+	ResponseEntity<List> getByGenreOnline(@PathVariable String genre) throws Exception {
 		List<Object> listByGen = new ArrayList<>();
-		listByGen.addAll(movieFeign.getMovieByGenre(genre));
-		listByGen.addAll(serieFeign.getByGenre(genre));
+		listByGen.addAll(services.getMovieByGenre(genre));
+		listByGen.addAll(services.getSerieByGenre(genre));
 		return ResponseEntity.ok(listByGen);
 	}
 
@@ -40,12 +39,12 @@ public class CatalogController {
 	}
 
 	@GetMapping("/movie/{genre}")
-	ResponseEntity<List<MovieFeign.MovieDto>> getMoviesGenre(@PathVariable String genre) {
-		return ResponseEntity.ok(movieFeign.getMovieByGenre(genre));
+	ResponseEntity<List<MovieFeign.MovieDto>> getMoviesGenre(@PathVariable String genre) throws Exception {
+		return ResponseEntity.ok(services.getMovieByGenre(genre));
 	}
 
 	@GetMapping("/series/{genre}")
-	ResponseEntity<List<SerieFeign.SerieDto>> getSeriesGenre(@PathVariable String genre) {
-		return ResponseEntity.ok(serieFeign.getByGenre(genre));
+	ResponseEntity<List<SerieFeign.SerieDto>> getSeriesGenre(@PathVariable String genre) throws Exception {
+		return ResponseEntity.ok(services.getSerieByGenre(genre));
 	}
 }
