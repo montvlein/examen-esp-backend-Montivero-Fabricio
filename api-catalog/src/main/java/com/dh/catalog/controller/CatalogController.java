@@ -3,12 +3,11 @@ package com.dh.catalog.controller;
 import com.dh.catalog.client.MovieFeign;
 
 import com.dh.catalog.client.SerieFeign;
+import com.dh.catalog.model.GenreResponse;
 import com.dh.catalog.service.CatalogServices;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,27 +23,15 @@ public class CatalogController {
 	}
 
 	@GetMapping("/online/{genre}")
-	ResponseEntity<List> getByGenreOnline(@PathVariable String genre) throws Exception {
-		List<Object> listByGen = new ArrayList<>();
-		listByGen.addAll(services.getMovieByGenre(genre));
-		listByGen.addAll(services.getSerieByGenre(genre));
-		return ResponseEntity.ok(listByGen);
+	@ResponseStatus(HttpStatus.OK)
+	GenreResponse getByGenreOnline(@PathVariable String genre) throws Exception {
+		return services.getByGenreOnline(genre);
 	}
 
 	@GetMapping("/offline/{genre}")
-	ResponseEntity<List> getByGenreOffline(@PathVariable String genre) {
-		List<Object> listByGen = new ArrayList<>();
-		// todo: add collection from mongo librery
-		return ResponseEntity.ok(listByGen);
+	@ResponseStatus(HttpStatus.OK)
+	GenreResponse getByGenreOffline(@PathVariable String genre) throws Exception {
+		return services.getByGenreOffline(genre);
 	}
 
-	@GetMapping("/movie/{genre}")
-	ResponseEntity<List<MovieFeign.MovieDto>> getMoviesGenre(@PathVariable String genre) throws Exception {
-		return ResponseEntity.ok(services.getMovieByGenre(genre));
-	}
-
-	@GetMapping("/series/{genre}")
-	ResponseEntity<List<SerieFeign.SerieDto>> getSeriesGenre(@PathVariable String genre) throws Exception {
-		return ResponseEntity.ok(services.getSerieByGenre(genre));
-	}
 }

@@ -2,6 +2,7 @@ package com.dh.catalog.service;
 
 import com.dh.catalog.client.MovieFeign;
 import com.dh.catalog.client.SerieFeign;
+import com.dh.catalog.model.GenreResponse;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,21 @@ public class CatalogServices {
     private List<SerieFeign.SerieDto> getSerieByGenreFallbackValue(String genre, Throwable t) throws Exception {
         List<SerieFeign.SerieDto> list = new ArrayList<>();
         return list;
+    }
+
+    public GenreResponse getByGenreOnline(String genre) throws Exception {
+        GenreResponse listByGen = new GenreResponse();
+        listByGen.setGenre(genre);
+        listByGen.setMovies(getMovieByGenre(genre));
+        listByGen.setSeries(getSerieByGenre(genre));
+        return listByGen;
+    }
+
+    public GenreResponse getByGenreOffline(String genre) throws Exception {
+        GenreResponse listByGen = new GenreResponse();
+        listByGen.setGenre(genre);
+        listByGen.setMovies(getMovieByGenre(genre));
+        listByGen.setSeries(getSerieByGenre(genre));
+        return listByGen;
     }
 }
