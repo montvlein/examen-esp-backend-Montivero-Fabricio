@@ -2,6 +2,7 @@ package com.dh.movie;
 
 import com.dh.movie.model.Movie;
 import com.dh.movie.repository.MovieRepository;
+import com.dh.movie.service.MovieService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,16 +20,16 @@ public class ApiMovieApplication {
 
 
     @Bean
-    public CommandLineRunner loadData(MovieRepository repository) {
+    public CommandLineRunner loadData(MovieRepository repository, MovieService service) {
         return (args) -> {
             if (!repository.findAll().isEmpty()) {
                 return;
             }
 
-            repository.save(new Movie(null, "Pelicula 1", "Terror", "www.netflix.com"));
-            repository.save(new Movie(null, "Pelicula 2", "Terror", "www.netflix.com"));
-            repository.save(new Movie(null, "Pelicula 3", "Comedia", "www.netflix.com"));
-            repository.save(new Movie(null, "Pelicula 4", "Ficcion", "www.netflix.com"));
+            service.save(new Movie(null, "Pelicula 1", "Terror", "www.netflix.com"));
+            service.save(new Movie(null, "Pelicula 2", "Terror", "www.netflix.com"));
+            service.save(new Movie(null, "Pelicula 3", "Comedia", "www.netflix.com"));
+            service.save(new Movie(null, "Pelicula 4", "Ficcion", "www.netflix.com"));
         };
     }
 
