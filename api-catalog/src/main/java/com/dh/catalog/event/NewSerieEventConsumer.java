@@ -1,28 +1,18 @@
 package com.dh.catalog.event;
 
 import com.dh.catalog.config.RabbitMQConfig;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.dh.catalog.model.RabbitMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class NewSerieEventConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NEW_SERIE)
-    public void listenNewWalletEvent(Message message) {
-        System.out.println("We have a notification of a new serie with id '" + message.getId() + "' nombre '" + message.getName() + "' genero '" + message.getGenre());
+    public void listenNewWalletEvent(RabbitMessage message) {
+        log.info("A new serie has been created with id '" + message.getId() + "', name '" + message.getName() + "' and genero '" + message.getGenre() + "'");
     }
 
-    @Getter
-    @Setter
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Message {
-        private String id;
-        private String name;
-        private String genre;
-    }
 }
