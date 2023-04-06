@@ -54,6 +54,14 @@ public class CatalogServices {
         return listByGen;
     }
 
+    public void save(MovieFeign.MovieDto movie) {
+        movieRepository.save(movie);
+    }
+
+    public void save(SerieFeign.SerieDto serie) {
+        serieRepository.save(serie);
+    }
+
     public GenreResponse getByGenreOffline(String genre) throws Exception {
         GenreResponse listByGen = new GenreResponse();
         listByGen.setGenre(genre);
