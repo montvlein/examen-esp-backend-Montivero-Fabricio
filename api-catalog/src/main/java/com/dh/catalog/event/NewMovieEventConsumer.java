@@ -22,7 +22,6 @@ public class NewMovieEventConsumer {
     public void listenNewWalletEvent(RabbitMessage message) throws JsonProcessingException {
         log.info("A new " + message.getType() + " has been created with id '" + message.getId() + "' on genero '" + message.getGenre() + "'");
         ObjectMapper objectMapper = new ObjectMapper();
-        log.info(message.getObj());
         MovieFeign.MovieDto movie = objectMapper.readValue(message.getObj(), MovieFeign.MovieDto.class);
         services.save(movie);
     }
