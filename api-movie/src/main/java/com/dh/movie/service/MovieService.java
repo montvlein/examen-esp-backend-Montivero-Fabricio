@@ -27,8 +27,9 @@ public class MovieService {
         Movie movieSaved = movieRepository.save(movie);
         NewMovieEventProducer.Message message = new NewMovieEventProducer.Message();
         message.setId(String.valueOf(movieSaved.getId()));
-        message.setName(movieSaved.getName());
+        message.setType(NewMovieEventProducer.Message.AudiovisualType.MOVIE);
         message.setGenre(movieSaved.getGenre());
+        message.setObj(movieSaved);
         eventProducer.publishNewMovieEvent(message);
         return movieSaved.getId();
     }

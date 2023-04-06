@@ -27,7 +27,9 @@ public class NewMovieEventProducer {
     @AllArgsConstructor
     public static class Message {
         private String id;
-        private String name;
+        private AudiovisualType type;
         private String genre;
+        private Object obj;
+        public enum AudiovisualType { MOVIE }
     }
 }

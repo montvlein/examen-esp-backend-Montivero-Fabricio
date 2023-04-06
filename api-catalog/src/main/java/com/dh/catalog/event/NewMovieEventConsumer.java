@@ -12,7 +12,7 @@ public class NewMovieEventConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NEW_MOVIE)
     public void listenNewWalletEvent(RabbitMessage message) {
-        log.info("A new movie has been created with id '" + message.getId() + "', name '" + message.getName() + "' and genero '" + message.getGenre() + "'");
+        log.info("A new " + message.getType() + " has been created with id '" + message.getId() + "' on genero '" + message.getGenre() + "'");
     }
 
 }

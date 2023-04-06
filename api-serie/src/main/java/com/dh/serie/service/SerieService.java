@@ -31,8 +31,9 @@ public class SerieService {
         Serie serieSaved = repository.save(serie);
         NewSerieEventProducer.Message message = new NewSerieEventProducer.Message();
         message.setId(serie.getId());
-        message.setName(serie.getName());
+        message.setType(NewSerieEventProducer.Message.AudiovisualType.SERIE);
         message.setGenre(serie.getGenre());
+        message.setObj(serieSaved);
         eventProducer.publishNewSerieEvent(message);
         return serieSaved.getId();
     }
