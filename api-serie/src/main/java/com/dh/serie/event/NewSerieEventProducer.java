@@ -29,7 +29,7 @@ public class NewSerieEventProducer {
         private String id;
         private AudiovisualType type;
         private String genre;
-        private Object obj;
+        private String obj;
         public enum AudiovisualType { SERIE }
     }
 }

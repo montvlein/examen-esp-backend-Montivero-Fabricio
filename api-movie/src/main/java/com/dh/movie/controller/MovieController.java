@@ -26,7 +26,7 @@ public class MovieController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    Long saveMovie(@RequestBody Movie movie) {
+    Long saveMovie(@RequestBody Movie movie) throws Exception {
         return movieService.save(movie);
     }
 }

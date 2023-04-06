@@ -3,6 +3,8 @@ package com.dh.serie.service;
 import com.dh.serie.event.NewSerieEventProducer;
 import com.dh.serie.model.Serie;
 import com.dh.serie.repository.SerieRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,13 +29,15 @@ public class SerieService {
         return repository.findAllByGenre(genre);
     }
 
-    public String create(Serie serie) {
+    public String create(Serie serie) throws JsonProcessingException {
         Serie serieSaved = repository.save(serie);
         NewSerieEventProducer.Message message = new NewSerieEventProducer.Message();
         message.setId(serie.getId());
         message.setType(NewSerieEventProducer.Message.AudiovisualType.SERIE);
         message.setGenre(serie.getGenre());
-        message.setObj(serieSaved);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonSerie = objectMapper.writeValueAsString(serieSaved);
+        message.setObj(jsonSerie);
         eventProducer.publishNewSerieEvent(message);
         return serieSaved.getId();
     }

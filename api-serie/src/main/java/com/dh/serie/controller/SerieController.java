@@ -29,7 +29,7 @@ public class SerieController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String create(@RequestBody Serie serie) {
+    public String create(@RequestBody Serie serie) throws Exception {
         serieService.create(serie);
         return serie.getId();
     }

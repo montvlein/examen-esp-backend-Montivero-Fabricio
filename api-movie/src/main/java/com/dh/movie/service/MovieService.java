@@ -4,6 +4,8 @@ package com.dh.movie.service;
 import com.dh.movie.event.NewMovieEventProducer;
 import com.dh.movie.model.Movie;
 import com.dh.movie.repository.MovieRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,13 +25,15 @@ public class MovieService {
         return movieRepository.findByGenre(genre);
     }
 
-    public Long save(Movie movie) {
+    public Long save(Movie movie) throws JsonProcessingException {
         Movie movieSaved = movieRepository.save(movie);
         NewMovieEventProducer.Message message = new NewMovieEventProducer.Message();
         message.setId(String.valueOf(movieSaved.getId()));
         message.setType(NewMovieEventProducer.Message.AudiovisualType.MOVIE);
         message.setGenre(movieSaved.getGenre());
-        message.setObj(movieSaved);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonMovie = objectMapper.writeValueAsString(movieSaved);
+        message.setObj(jsonMovie);
         eventProducer.publishNewMovieEvent(message);
         return movieSaved.getId();
     }

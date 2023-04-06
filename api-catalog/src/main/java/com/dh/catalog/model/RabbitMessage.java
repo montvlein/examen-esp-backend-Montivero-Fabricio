@@ -14,7 +14,7 @@ public class RabbitMessage {
     private AudiovisualType type;
     private String genre;
 
-    private Object obj;
+    private String obj;
 
     private enum AudiovisualType { MOVIE , SERIE }
 }
