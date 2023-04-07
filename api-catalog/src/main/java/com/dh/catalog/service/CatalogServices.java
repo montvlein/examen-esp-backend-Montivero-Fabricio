@@ -7,12 +7,14 @@ import com.dh.catalog.repository.OfflineMovieRepository;
 import com.dh.catalog.repository.OfflineSerieRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class CatalogServices {
 
     private final SerieFeign serieFeign;
@@ -39,14 +41,14 @@ public class CatalogServices {
         return serieFeign.getByGenre(genre);
     }
 
-    private List<MovieFeign.MovieDto> getMovieByGenreFallbackValue(String genre, Throwable t) throws Exception {
+    private List<MovieFeign.MovieDto> getMovieByGenreFallbackValue(String genre, Throwable t) {
         return movieRepository.findAllByGenre(genre);
     }
-    private List<SerieFeign.SerieDto> getSerieByGenreFallbackValue(String genre, Throwable t) throws Exception {
+    private List<SerieFeign.SerieDto> getSerieByGenreFallbackValue(String genre, Throwable t) {
         return serieRepository.findAllByGenre(genre);
     }
 
-    public GenreResponse getByGenreOnline(String genre) throws Exception {
+    public GenreResponse getByGenreOnline(String genre) {
         GenreResponse listByGen = new GenreResponse();
         listByGen.setGenre(genre);
         listByGen.setMovies(getMovieByGenre(genre));
@@ -62,7 +64,7 @@ public class CatalogServices {
         serieRepository.save(serie);
     }
 
-    public GenreResponse getByGenreOffline(String genre) throws Exception {
+    public GenreResponse getByGenreOffline(String genre) {
         GenreResponse listByGen = new GenreResponse();
         listByGen.setGenre(genre);
         listByGen.setMovies(movieRepository.findAllByGenre(genre));

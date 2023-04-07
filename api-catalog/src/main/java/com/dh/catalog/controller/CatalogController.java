@@ -24,13 +24,13 @@ public class CatalogController {
 
 	@GetMapping("/online/{genre}")
 	@ResponseStatus(HttpStatus.OK)
-	GenreResponse getByGenreOnline(@PathVariable String genre) throws Exception {
+	GenreResponse getByGenreOnline(@PathVariable String genre) {
 		return services.getByGenreOnline(genre);
 	}
 
 	@GetMapping("/offline/{genre}")
 	@ResponseStatus(HttpStatus.OK)
-	GenreResponse getByGenreOffline(@PathVariable String genre) throws Exception {
+	GenreResponse getByGenreOffline(@PathVariable String genre) {
 		return services.getByGenreOffline(genre);
 	}
 
