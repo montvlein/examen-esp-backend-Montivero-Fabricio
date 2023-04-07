@@ -20,9 +20,9 @@ public class NewSerieEventConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NEW_SERIE)
     public void listenNewWalletEvent(RabbitMessage message) throws JsonProcessingException {
-        log.info("A new " + message.getType() + " has been created with id '" + message.getId() + "' on genero '" + message.getGenre() + "'");
         ObjectMapper objectMapper = new ObjectMapper();
         SerieFeign.SerieDto serie = objectMapper.readValue(message.getObj(), SerieFeign.SerieDto.class);
+        log.info("A new " + message.getType() + " has been created with id '" + serie.getId() + "' on genero '" + serie.getGenre() + "'");
         services.save(serie);
     }
 

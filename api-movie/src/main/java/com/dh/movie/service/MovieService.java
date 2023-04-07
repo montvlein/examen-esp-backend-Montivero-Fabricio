@@ -28,9 +28,7 @@ public class MovieService {
     public Long save(Movie movie) throws JsonProcessingException {
         Movie movieSaved = movieRepository.save(movie);
         NewMovieEventProducer.Message message = new NewMovieEventProducer.Message();
-        message.setId(String.valueOf(movieSaved.getId()));
         message.setType(NewMovieEventProducer.Message.AudiovisualType.MOVIE);
-        message.setGenre(movieSaved.getGenre());
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonMovie = objectMapper.writeValueAsString(movieSaved);
         message.setObj(jsonMovie);

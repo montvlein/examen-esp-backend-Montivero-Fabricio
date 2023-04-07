@@ -26,9 +26,7 @@ public class NewSerieEventProducer {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Message {
-        private String id;
         private AudiovisualType type;
-        private String genre;
         private String obj;
         public enum AudiovisualType { SERIE }
     }

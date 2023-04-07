@@ -20,9 +20,9 @@ public class NewMovieEventConsumer {
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NEW_MOVIE)
     public void listenNewWalletEvent(RabbitMessage message) throws JsonProcessingException {
-        log.info("A new " + message.getType() + " has been created with id '" + message.getId() + "' on genero '" + message.getGenre() + "'");
         ObjectMapper objectMapper = new ObjectMapper();
         MovieFeign.MovieDto movie = objectMapper.readValue(message.getObj(), MovieFeign.MovieDto.class);
+        log.info("A new " + message.getType() + " has been created with id '" + movie.getId() + "' on genero '" + movie.getGenre() + "'");
         services.save(movie);
     }
 

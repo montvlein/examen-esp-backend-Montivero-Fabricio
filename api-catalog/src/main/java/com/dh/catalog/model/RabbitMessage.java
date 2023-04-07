@@ -10,10 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RabbitMessage {
-    private String id;
     private AudiovisualType type;
-    private String genre;
-
     private String obj;
 
     private enum AudiovisualType { MOVIE , SERIE }

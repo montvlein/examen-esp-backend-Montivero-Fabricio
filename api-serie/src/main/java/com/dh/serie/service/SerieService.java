@@ -32,9 +32,7 @@ public class SerieService {
     public String create(Serie serie) throws JsonProcessingException {
         Serie serieSaved = repository.save(serie);
         NewSerieEventProducer.Message message = new NewSerieEventProducer.Message();
-        message.setId(serie.getId());
         message.setType(NewSerieEventProducer.Message.AudiovisualType.SERIE);
-        message.setGenre(serie.getGenre());
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonSerie = objectMapper.writeValueAsString(serieSaved);
         message.setObj(jsonSerie);
