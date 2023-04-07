@@ -2,6 +2,8 @@ package com.dh.catalog.service;
 
 import com.dh.catalog.client.MovieFeign;
 import com.dh.catalog.client.SerieFeign;
+import com.dh.catalog.exceptions.MovieServerNotResponse;
+import com.dh.catalog.exceptions.SerieServerNotResponse;
 import com.dh.catalog.model.GenreResponse;
 import com.dh.catalog.repository.OfflineMovieRepository;
 import com.dh.catalog.repository.OfflineSerieRepository;
@@ -10,7 +12,6 @@ import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,14 +32,22 @@ public class CatalogServices {
 
     @CircuitBreaker(name="getMovieByGenr", fallbackMethod = "getMovieByGenreFallbackValue")
     @Retry(name = "getMovieByGenr")
-    public List<MovieFeign.MovieDto> getMovieByGenre(String genr) {
-        return movieFeign.getByGenre(genr);
+    public List<MovieFeign.MovieDto> getMovieByGenre(String genr) throws MovieServerNotResponse {
+        try {
+            return movieFeign.getByGenre(genr);
+        } catch (Exception e) {
+            throw new MovieServerNotResponse("Movies services unavailable");
+        }
     }
 
     @CircuitBreaker(name="getSerieByGenr", fallbackMethod = "getSerieByGenreFallbackValue")
     @Retry(name = "getSerieByGenr")
-    public List<SerieFeign.SerieDto> getSerieByGenre(String genre) {
-        return serieFeign.getByGenre(genre);
+    public List<SerieFeign.SerieDto> getSerieByGenre(String genre) throws SerieServerNotResponse {
+        try {
+            return serieFeign.getByGenre(genre);
+        } catch (Exception e) {
+            throw new SerieServerNotResponse("Series services unavailable");
+        }
     }
 
     private List<MovieFeign.MovieDto> getMovieByGenreFallbackValue(String genre, Throwable t) {
@@ -51,17 +60,20 @@ public class CatalogServices {
     public GenreResponse getByGenreOnline(String genre) {
         GenreResponse listByGen = new GenreResponse();
         listByGen.setGenre(genre);
+
         try {
             listByGen.setMovies(getMovieByGenre(genre));
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        } catch (MovieServerNotResponse movieServerException) {
+            log.error(movieServerException.getMessage());
+            log.info("resolving Movie Server Not Response with offline repository");
             listByGen.setMovies(movieRepository.findAllByGenre(genre));
         }
 
         try {
             listByGen.setSeries(getSerieByGenre(genre));
-        } catch (Exception e) {
-            log.error(e.getMessage());
+        } catch (SerieServerNotResponse serieServerException) {
+            log.error(serieServerException.getMessage());
+            log.info("resolving Serie Server Not Response with offline repository");
             listByGen.setSeries(serieRepository.findAllByGenre(genre));
         }
 
