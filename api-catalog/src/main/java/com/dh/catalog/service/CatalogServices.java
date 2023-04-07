@@ -51,8 +51,20 @@ public class CatalogServices {
     public GenreResponse getByGenreOnline(String genre) {
         GenreResponse listByGen = new GenreResponse();
         listByGen.setGenre(genre);
-        listByGen.setMovies(getMovieByGenre(genre));
-        listByGen.setSeries(getSerieByGenre(genre));
+        try {
+            listByGen.setMovies(getMovieByGenre(genre));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            listByGen.setMovies(movieRepository.findAllByGenre(genre));
+        }
+
+        try {
+            listByGen.setSeries(getSerieByGenre(genre));
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            listByGen.setSeries(serieRepository.findAllByGenre(genre));
+        }
+
         return listByGen;
     }
 
