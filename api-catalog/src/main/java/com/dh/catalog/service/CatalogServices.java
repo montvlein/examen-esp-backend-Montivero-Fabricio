@@ -4,7 +4,7 @@ import com.dh.catalog.client.MovieFeign;
 import com.dh.catalog.client.SerieFeign;
 import com.dh.catalog.exceptions.MovieServerNotResponse;
 import com.dh.catalog.exceptions.SerieServerNotResponse;
-import com.dh.catalog.model.GenreResponse;
+import com.dh.catalog.model.CatalogResponse;
 import com.dh.catalog.repository.OfflineMovieRepository;
 import com.dh.catalog.repository.OfflineSerieRepository;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -57,8 +57,8 @@ public class CatalogServices {
         return serieRepository.findAllByGenre(genre);
     }
 
-    public GenreResponse getByGenreOnline(String genre) {
-        GenreResponse listByGen = new GenreResponse();
+    public CatalogResponse getByGenreOnline(String genre) {
+        CatalogResponse listByGen = new CatalogResponse();
         listByGen.setGenre(genre);
 
         try {
@@ -88,8 +88,16 @@ public class CatalogServices {
         serieRepository.save(serie);
     }
 
-    public GenreResponse getByGenreOffline(String genre) {
-        GenreResponse listByGen = new GenreResponse();
+    public List<MovieFeign.MovieDto> getMovieByGenreOffline(String genre) {
+        return movieRepository.findAllByGenre(genre);
+    }
+
+    public List<SerieFeign.SerieDto> getSerieByGenreOffline(String genre) {
+        return serieRepository.findAllByGenre(genre);
+    }
+
+    public CatalogResponse getByGenreOffline(String genre) {
+        CatalogResponse listByGen = new CatalogResponse();
         listByGen.setGenre(genre);
         listByGen.setMovies(movieRepository.findAllByGenre(genre));
         listByGen.setSeries(serieRepository.findAllByGenre(genre));

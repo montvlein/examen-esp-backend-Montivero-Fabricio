@@ -5,7 +5,7 @@ import com.dh.catalog.client.MovieFeign;
 import com.dh.catalog.client.SerieFeign;
 import com.dh.catalog.exceptions.MovieServerNotResponse;
 import com.dh.catalog.exceptions.SerieServerNotResponse;
-import com.dh.catalog.model.GenreResponse;
+import com.dh.catalog.model.CatalogResponse;
 import com.dh.catalog.service.CatalogServices;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -24,28 +24,38 @@ public class CatalogController {
 
 	@GetMapping("/online/{genre}")
 	@ResponseStatus(HttpStatus.OK)
-	GenreResponse getByGenreOnline(@PathVariable String genre) {
+	CatalogResponse getByGenreOnline(@PathVariable String genre) {
 		return services.getByGenreOnline(genre);
 	}
 
 	@GetMapping("/offline/{genre}")
 	@ResponseStatus(HttpStatus.OK)
-	GenreResponse getByGenreOffline(@PathVariable String genre) {
+	CatalogResponse getByGenreOffline(@PathVariable String genre) {
 		return services.getByGenreOffline(genre);
 	}
 
-
-	//	metodos para probar el fallback del circuit breaker
-	@GetMapping("/movies/{genre}")
+	@GetMapping("/online/{genre}/movies")
 	@ResponseStatus(HttpStatus.OK)
-	List<MovieFeign.MovieDto> getMoviesByGenre(@PathVariable String genre) throws MovieServerNotResponse{
+	List<MovieFeign.MovieDto> getMoviesByGenreOnline(@PathVariable String genre) throws MovieServerNotResponse {
 		return services.getMovieByGenre(genre);
 	}
 
-	@GetMapping("/series/{genre}")
+	@GetMapping("/online/{genre}/series")
 	@ResponseStatus(HttpStatus.OK)
-	List<SerieFeign.SerieDto> getSeriesByGenre(@PathVariable String genre) throws SerieServerNotResponse {
+	List<SerieFeign.SerieDto> getSeriesByGenreOnline(@PathVariable String genre) throws SerieServerNotResponse {
 		return services.getSerieByGenre(genre);
+	}
+
+	@GetMapping("/offline/{genre}/movies")
+	@ResponseStatus(HttpStatus.OK)
+	List<MovieFeign.MovieDto> getMoviesByGenreOffline(@PathVariable String genre) {
+		return services.getMovieByGenreOffline(genre);
+	}
+
+	@GetMapping("/offline/{genre}/series")
+	@ResponseStatus(HttpStatus.OK)
+	List<SerieFeign.SerieDto> getSeriesByGenreOffline(@PathVariable String genre) {
+		return services.getSerieByGenreOffline(genre);
 	}
 
 }

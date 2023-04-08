@@ -13,7 +13,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class GenreResponse {
+public class CatalogResponse {
     private String genre;
     private List<MovieFeign.MovieDto> movies = new ArrayList<>();
     private List<SerieFeign.SerieDto> series = new ArrayList<>();
